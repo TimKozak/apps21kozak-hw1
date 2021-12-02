@@ -38,6 +38,53 @@ public class TemperatureSeriesAnalysisTest {
         
         assertEquals(expResult, actualResult, 0.00001);        
     }
-    
+
+    @Test
+    public void testAddTemps() {
+        double[] temperatureSeries = {3.0, -5.0, 1.0, 5.0};
+        TemperatureSeriesAnalysis seriesAnalysis = new TemperatureSeriesAnalysis();
+        int expResult = 4;
+
+        int actualResult = seriesAnalysis.addTemps(temperatureSeries);
+
+        assertEquals(expResult, actualResult, 0.00001);
+    }
+
+    @Test
+    public void testSummary() {
+        double[] temperatureSeries = {3.0, -5.0, 1.0, 5.0};
+        TemperatureSeriesAnalysis seriesAnalysis = new TemperatureSeriesAnalysis();
+        seriesAnalysis.addTemps(temperatureSeries);
+
+        TempSummaryStatistics summary = seriesAnalysis.summaryStatistics();
+
+        assertEquals(summary.getAvgTemp(), 1, 0.00001);
+        assertEquals(summary.getDevTemp(), 3.7416573867739413, 0.00001);
+        assertEquals(summary.getMinTemp(), -5.0, 0.00001);
+        assertEquals(summary.getMaxTemp(), 5.0, 0.00001);
+    }
+
+    @Test
+    public void testGreaterLessThan() {
+        double[] temperatureSeries = {3.0, -5.0, 1.0, 5.0};
+        TemperatureSeriesAnalysis seriesAnalysis = new TemperatureSeriesAnalysis(temperatureSeries);
+        double[] greaterThanTwo = new double[]{3.0, 5.0};
+        double[] lessThanTwo = new double[]{-5.0, 1.0};
+
+        assertEquals(seriesAnalysis.findTempsGreaterThen(2.0)[0], greaterThanTwo[0], 0.00001);
+        assertEquals(seriesAnalysis.findTempsLessThen(2.0)[0], lessThanTwo[0], 0.00001);
+    }
+
+    @Test
+    public void testSearches() {
+        double[] temperatureSeries = {3.0, -5.0, 1.0, 5.0};
+        TemperatureSeriesAnalysis seriesAnalysis = new TemperatureSeriesAnalysis(temperatureSeries);
+
+        assertEquals(seriesAnalysis.findTempClosestToValue(6), 5.0, 0.00001);
+        assertEquals(seriesAnalysis.findTempClosestToZero(), 1, 0.00001);
+        assertEquals(seriesAnalysis.min(), -5.0, 0.00001);
+        assertEquals(seriesAnalysis.max(), 5.0, 0.00001);
+    }
+
 
 }
